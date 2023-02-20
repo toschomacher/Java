@@ -1,0 +1,19 @@
+package Todor;
+
+import java.util.Scanner;
+
+public class StringReverse
+{
+
+	public static void main(String[] args)
+	{
+		// TODO Auto-generated method stub
+		String user_inp, reverse_string;
+		Scanner scan = new Scanner(System.in);
+		System.out.print("User input\nEnter a sentance: ");
+		user_inp = scan.nextLine();
+		reverse_string = new StringBuilder(user_inp).reverse().toString();
+		System.out.println("Output is:\n" + reverse_string);
+	}
+
+}
