@@ -1,4 +1,4 @@
-package Todor;
+package todor.lbu;
 
 import java.awt.Color; //imported by Todor
 //import java.awt.FlowLayout;
@@ -16,10 +16,35 @@ class MyHandler implements ActionListener
 
 public class MainClass extends LBUGraphics
 {
+	Letters letter = new Letters();
 	public static void main(String[] args)
 	{
 		new MainClass(); // create instance of class that extends LBUGraphics (could be separate class
 							// without main), gets out of static context
+	}
+	
+	public void about()	//overriding the about method
+	{
+		setBackground_Col(Color.MAGENTA);
+		clear();
+		//super.about();
+		myName();
+		System.out.println("My about method called.");
+	}
+	
+	public void myName()
+	{
+
+		setTurtleSpeed(1);
+		setPenColour(Color.BLACK);
+		letter.t(300, 300, 3, 10);
+		letter.o(345, 318, 3, 10);
+		letter.d(375, 318, 3, 10);
+		letter.o(405, 318, 3, 10);
+		setxPos(100);
+		setyPos(300);
+		
+		System.out.println("Calling myName method.");
 	}
 
 	public MainClass()
@@ -32,7 +57,8 @@ public class MainClass extends LBUGraphics
 		MainFrame.setDefaultCloseOperation(3);
 		MainFrame.setLayout(null);
 		setMaximumSize(null);
-		
+		setPreferredSize(1000, 600);
+		setPanelSize(1000, 600);
 		String txt = "<html>This program is in process of development by Todor Vasilev," +
 					 " a student from LBU CS4D.<br><br>Todor is still learning.</html>";
 		JLabel lbl = new JLabel(txt);
@@ -48,10 +74,12 @@ public class MainClass extends LBUGraphics
 		MainFrame.add(this); // "this" is this object that extends turtle graphics so we are adding a turtle
 								// graphics panel to the frame
 		//MainFrame.setSize(1100,400); // set the frame to a size we can see
-		MainFrame.setBounds(550, 350, 1100, 435);
+		MainFrame.setBounds(240, 200, 1100, 635);	//1080p 1k resolution
+		//MainFrame.setBounds(390, 270, 1100, 435);	//1440p 2k resolution
+		//MainFrame.setBounds(550, 350, 1100, 435);	//2160p 4k resolution
 		MainFrame.setVisible(true); // now display it
 
-		// about(); //call the LBUGraphics about method to display version information.
+		about(); //call the LBUGraphics about method to display version information.
 	}
 
 	public void processCommand(String command) // this method must be provided because LBUGraphics will call it when
@@ -192,4 +220,75 @@ public class MainClass extends LBUGraphics
 
 	}
 
+	class Letters
+	{
+		public void t(int x, int y, int stroke, int size)
+		{
+			setxPos(x);
+			setyPos(y);
+			setStroke(stroke);
+			penDown();
+			forward(5*size);
+			turnLeft(180);
+			forward(5*size);
+			turnLeft(90);
+			forward(2*size);
+			turnLeft(180);
+			forward(4*size);
+			penUp();
+			forward(25);
+			turnRight(90);
+		}
+		public void o(int x, int y, int stroke, int size)
+		{
+			setxPos(x);
+			setyPos(y);
+			setStroke(stroke);
+			penDown();
+			turnRight(90);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(2*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(2*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(135);
+			penUp();
+			forward(200);
+		}
+		public void d(int x, int y, int stroke, int size)
+		{
+			setxPos(x);
+			setyPos(y);
+			setStroke(stroke);
+			penDown();
+			turnRight(90);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(2*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(1*size);
+			turnLeft(45);
+			forward(5*size);
+			turnLeft(180);
+			forward(6*size);
+			penUp();
+			forward(200);
+		}
+	}
 }
