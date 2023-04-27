@@ -24,7 +24,9 @@ public class MainClass extends Commands
 				+"ABOUT - plays Turtle Graphics Demo<br>"
 				+"RESET - resets the turtle at the start<br>"
 				+"CLEAR - clears the drawing field<br>"
-				+ "TURNLEFT or TURNTLEFT [parameter]</html>";
+				+ "TURNRIGHT or TURNRIGHT [parameter]<br>"
+				+ "PENUP<br>"
+				+ "PENDOWN<br></html>";
 		txt3 = "<html>Saving commands history</html>";
 		txt4 = "<html>Loading file</html>";
 		JLabel lbl2 = new JLabel(txt1);
@@ -35,6 +37,7 @@ public class MainClass extends Commands
 		JButton btn4 = new JButton("Load");
 		JFrame mainFrame = new JFrame("Turtle Graphics Application"); // create a frame to display the turtle panel on
 		JLabel lbl1 = new JLabel();
+		lbl3.setVerticalAlignment(JLabel.TOP);
 		mainFrame.setResizable(false);
 		mainFrame.setDefaultCloseOperation(3);
 		mainFrame.setLayout(null);
@@ -46,11 +49,11 @@ public class MainClass extends Commands
 		// mainFrame.setBounds(550, 350, 1100, 435); //2160p 4k resolution
 		mainFrame.setVisible(true); // now display it
 		// Bevel Border LOWERED for additional interaction
-		lbl1.setBounds(805, 18, 275, 330);
+		lbl1.setBounds(805, 10, 275, 340);
 		lbl1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		lbl2.setBounds(810, 15, 255, 95); // setting the size and position of the label
 		mainFrame.add(lbl2); // adding the label to the window
-		lbl3.setBounds(810, 75, 255, 95); // setting the size and position of the label
+		lbl3.setBounds(810, 110, 255, 195); // setting the size and position of the label
 		mainFrame.add(lbl3);
 		mainFrame.add(lbl1);
 		// Button 1 CLOSE
