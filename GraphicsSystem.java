@@ -1,88 +1,348 @@
 package todor.lbu;
 
 import java.awt.Color;
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
 
-public class MainClass extends Commands
+import javax.swing.JOptionPane;
+
+import uk.ac.leedsbeckett.oop.LBUGraphics;
+
+public abstract class GraphicsSystem extends LBUGraphics
 {
-	private String txt1, txt2, txt3, txt4;
 
-	public static void main(String[] args)
-	{
-
-		new MainClass();
-	}
-
-	public MainClass()
+	public GraphicsSystem()
 	{
 		super();
-		txt1 = "<html>This program was partly developed by Todor Vasilev, "
-				+ "LBU student - CS4D 2022-2023.<br><br>Student ID - c3643417<br>"
-				+ "_____________________________________</html>";
-		txt2 = "<html>Available commands:<br>"
-				+"ABOUT - plays Turtle Graphics Demo<br>"
-				+"RESET - resets the turtle at the start<br>"
-				+"CLEAR - clears the drawing field<br>"
-				+ "TURNLEFT or TURNTLEFT [parameter]</html>";
-		txt3 = "<html>Saving commands history</html>";
-		txt4 = "<html>Loading file</html>";
-		JLabel lbl2 = new JLabel(txt1);
-		JLabel lbl3 = new JLabel("");
-		JButton btn1 = new JButton("Close");
-		JButton btn2 = new JButton("Help");
-		JButton btn3 = new JButton("Save");
-		JButton btn4 = new JButton("Load");
-		JFrame mainFrame = new JFrame("Turtle Graphics Application"); // create a frame to display the turtle panel on
-		JLabel lbl1 = new JLabel();
-		mainFrame.setResizable(false);
-		mainFrame.setDefaultCloseOperation(3);
-		mainFrame.setLayout(null);
-		setMaximumSize(null);
-		//Adding TurtleGraphics Panel to the main frame
-		mainFrame.add(this);
-		mainFrame.setBounds(240, 200, 1100, 440); // 1080p 1k resolution
-		// mainFrame.setBounds(390, 270, 1100, 435); //1440p 2k resolution
-		// mainFrame.setBounds(550, 350, 1100, 435); //2160p 4k resolution
-		mainFrame.setVisible(true); // now display it
-		// Bevel Border LOWERED for additional interaction
-		lbl1.setBounds(805, 18, 275, 330);
-		lbl1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		lbl2.setBounds(810, 15, 255, 95); // setting the size and position of the label
-		mainFrame.add(lbl2); // adding the label to the window
-		lbl3.setBounds(810, 75, 255, 95); // setting the size and position of the label
-		mainFrame.add(lbl3);
-		mainFrame.add(lbl1);
-		// Button 1 CLOSE
-		btn1.setBounds(800, 360, 70, 30);
-		mainFrame.add(btn1);
-		btn1.addActionListener(e -> System.exit(0));
-		// Button 2 HELP
-		btn2.setBounds(871, 360, 70, 30);
-		mainFrame.add(btn2);
-		btn2.addActionListener(e -> lbl3.setText(txt2));
-		// Button 3 SAVE
-		btn3.setBounds(942, 360, 70, 30);
-		mainFrame.add(btn3);
-		btn3.addActionListener(e ->
-		{
-			lbl3.setText(txt3); // adding the label to the window
-		});
-		// Button 4 LOAD
-		btn4.setBounds(1013, 360, 70, 30);
-		mainFrame.add(btn4);
-		btn4.addActionListener(e ->
-		{
-			lbl3.setText(txt4);
-		});
-
-		penDown();
-		setPenColour(Color.GREEN);
-		// about();
+		System.out.println("GraphicsSystem constructor called");
+	}
+	
+	
+	
+	public Color myColour(int r, int g, int b)
+	{
+		Color color = new Color(r,g,b);
+		return color;
 	}
 
-	public void processCommand(String command)
+	public void forward(int distance)
 	{
-		commands(command);
+		super.forward(distance);
+		if (xPos > 800)
+		{
+			System.out.println("Out of bounds");
+			setxPos(800);
+			turnLeft(360);
+			return;
+		}
+		if (xPos < 0)
+		{
+			System.out.println("Out of bounds");
+			setxPos(0);
+			turnLeft(360);
+			return;
+		}
+		if (yPos > 400)
+		{
+			System.out.println("Out of bounds");
+			setyPos(400);
+			turnLeft(360);
+			return;
+		}
+		if (yPos < 0)
+		{
+			System.out.println("Out of bounds");
+			setyPos(0);
+			turnLeft(360);
+			return;
+		}
+	}
+
+	private void tCap(int x, int y, int stroke, int size)
+	{
+		setxPos(x);
+		setyPos(y);
+		setStroke(stroke);
+		penDown();
+		forward(5 * size);
+		turnLeft(180);
+		forward(5 * size);
+		turnLeft(90);
+		forward(2 * size);
+		turnLeft(180);
+		forward(4 * size);
+		penUp();
+		forward(25);
+		turnRight(90);
+	}
+
+	private void oSml(int x, int y, int stroke, int size)
+	{
+		setxPos(x);
+		setyPos(y);
+		setStroke(stroke);
+		penDown();
+		turnRight(90);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(2 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(2 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(135);
+		penUp();
+		//forward(200);
+	}
+
+	private void dSml(int x, int y, int stroke, int size)
+	{
+		setxPos(x);
+		setyPos(y);
+		setStroke(stroke);
+		penDown();
+		turnRight(90);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(2 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(45);
+		forward(5 * size);
+		turnLeft(180);
+		forward(6 * size);
+		turnLeft(180);
+		forward(3 * size);
+		turnLeft(45);
+		forward(1 * size);
+		turnLeft(135);
+		penUp();
+		//forward(200);
+	}
+
+	private void rSml(int x, int y, int stroke, int size)
+	{
+		setxPos(x);
+		setyPos(y);
+		setStroke(stroke);
+		penDown();
+		forward(4 * (int) (size * 0.85));
+		turnLeft(180);
+		forward(3 * (int) (size * 0.85));
+		turnRight(45);
+		forward(1 * size);
+		turnRight(45);
+		forward(1 * size);
+		penUp();
+		forward(55);
+		turnRight(90);
+	}
+
+	protected void square(int length)
+	{
+		if ((getxPos() + length * 4 + 5) > 800 || (getyPos() + length * 4 + 5) > 400)
+		{
+			displayMessage("Can not draw a square of this size that close to boarders");
+		} else
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				setPenColour(getPenColour());
+				penDown();
+				forward(length * 4);
+				turnLeft(90);
+				penUp();
+			}
+			turnRight(90); // taking the turtle
+			forward(40); // away from the square
+			turnLeft(90); // so it's visible
+		}
+	}
+
+	protected void triangle(int length)
+	{
+		if ((getxPos() + length * 4) > 800 || getxPos() < length * 4 || (getyPos() + length * 4) > 400
+				|| getyPos() < length * 4)
+		{
+			displayMessage("Can not draw a triangle of this size that close to boarders");
+		} else
+		{
+			turnRight(30);
+			for (int i = 0; i < 3; i++)
+			{
+				setPenColour(getPenColour());
+				penDown();
+				forward(length * 4);
+				turnLeft(120);
+				penUp();
+			}
+			turnRight(60); // taking the turtle
+			forward(40); // away from the square
+			turnLeft(90); // so it's visible
+		}
+
+	}
+
+	protected void triangle(int length1, int length2, int length3)
+	{
+		if ((getxPos() + length2 * 4 + 5) > 800 || (getyPos() + length1 * 4 + 5) > 400)
+		{
+			displayMessage("Can not draw a triangle of this size that close to boarders");
+		} else
+		{
+			int currentXpos = getxPos();
+			int currentYpos = getyPos();
+			reset();
+			setxPos(currentXpos);
+			setyPos(currentYpos);
+			penDown();
+			forward(length1 * 4);
+			turnLeft(90);
+			forward(length2 * 4);
+			turnLeft(150);
+			forward(length3 * 4);
+			penUp();
+			turnLeft(120);
+			forward(-50);
+		}
+	}
+
+	public void about() // overriding the about method
+	{
+		setBackground_Col(Color.DARK_GRAY);
+		clear();
+		displayMessage("Todor Vasilev");
+		super.about();
+		myName();
+		System.out.println("My about method called.");
+	}
+
+	public void reset()
+	{
+		super.reset();
+		penDown();
+	}
+
+	private void myName()
+	{
+		// Letters letter = new Letters();
+		setTurtleSpeed(1);
+		setPenColour(Color.BLACK);
+		tCap(318, 300, 2, 10);
+		oSml(345, 318, 2, 10);
+		dSml(375, 318, 2, 10);
+		oSml(405, 318, 2, 10);
+		rSml(417, 318, 2, 10);
+		setxPos(105);
+		setyPos(305);
+		setPenColour(Color.WHITE);
+		penDown();
+		circle(50);
+		penUp();
+		System.out.println("Calling myName method.");
+	}
+
+	public void xPosition()
+	{
+		System.out.println(getxPos());
+		displayMessage(Integer.toString(getxPos()));
+	}
+
+	public void yPosition()
+	{
+		System.out.println(getyPos());
+		displayMessage(Integer.toString(getyPos()));
+	}
+
+	public void align(int degrees)
+	{
+		String message1 = "You are already aligned";
+		String message2 = "You are diagonaly, no alignment necessary";
+		if (degrees < 0)
+		{
+			degrees *= -1;
+			if (degrees == 0 || degrees == 90 || degrees == 180 || degrees == 270)
+			{
+				displayMessage(message1);
+			} else
+			{
+				if (1 <= degrees && degrees <= 44)
+				{
+					turnRight(degrees);
+				} else if (46 <= degrees && degrees <= 89)
+				{
+					turnLeft(90 - degrees);
+				} else if (91 <= degrees && degrees <= 134)
+				{
+					turnRight(degrees - 90);
+				} else if (136 <= degrees && degrees <= 179)
+				{
+					turnLeft(180 - degrees);
+				} else if (181 <= degrees && degrees <= 224)
+				{
+					turnRight(degrees - 180);
+				} else if (226 <= degrees && degrees <= 269)
+				{
+					turnLeft(270 - degrees);
+				} else if (271 <= degrees && degrees <= 314)
+				{
+					turnRight(degrees - 270);
+				} else if (316 <= degrees && degrees <= 359)
+				{
+					turnLeft(360 - degrees);
+				} else
+				{
+					displayMessage(message2);
+				}
+			}
+		} else
+		{
+			if (degrees == 0 || degrees == 90 || degrees == 180 || degrees == 270)
+			{
+				displayMessage(message1);
+			} else
+			{
+				if (1 <= degrees && degrees <= 44)
+				{
+					turnLeft(degrees);
+				} else if (46 <= degrees && degrees <= 89)
+				{
+					turnRight(90 - degrees);
+				} else if (91 <= degrees && degrees <= 134)
+				{
+					turnLeft(degrees - 90);
+				} else if (136 <= degrees && degrees <= 179)
+				{
+					turnRight(180 - degrees);
+				} else if (181 <= degrees && degrees <= 224)
+				{
+					turnLeft(degrees - 180);
+				} else if (226 <= degrees && degrees <= 269)
+				{
+					turnRight(270 - degrees);
+				} else if (271 <= degrees && degrees <= 314)
+				{
+					turnLeft(degrees - 270);
+				} else if (316 <= degrees && degrees <= 359)
+				{
+					turnRight(360 - degrees);
+				} else
+				{
+					displayMessage(message2);
+				}
+			}
+		}
 	}
 }
