@@ -1,14 +1,25 @@
 package todor.lbu;
 
 import java.awt.Color;
-
 import javax.swing.JOptionPane;
 
-public abstract class Commands extends GraphicsSystem
+public class Commands extends GraphicsSystem
 {
-	protected void commands(String command)
+	private static final long serialVersionUID = 1L;
+
+	public Commands()
+	{
+		// super();
+		System.out.println("MainClass constructor called");
+		GUIparts myGUI = new GUIparts();
+		myGUI.myGUI(this);
+		penDown();
+	}
+
+	public void processCommand(String command)
 	{
 		String message1 = "Invalid/non-numeric parameter";
+		String message2 = "Excessively large number input";
 		displayMessage("");
 		String parStr1;
 		String[] myArray = command.toLowerCase().split(" ");
@@ -31,6 +42,9 @@ public abstract class Commands extends GraphicsSystem
 					parameter1 = -1;
 					parameter2 = -1;
 					parameter3 = -1;
+				} else if (parameter1 > 999)
+				{
+					displayMessage(message2);
 				}
 			} catch (NumberFormatException e)
 			{
@@ -47,6 +61,9 @@ public abstract class Commands extends GraphicsSystem
 				if (parameter1 < 0)
 				{
 					parameter1 = -1;
+				} else if (parameter1 > 999)
+				{
+					displayMessage(message2);
 				}
 			} catch (NumberFormatException e)
 			{
@@ -60,6 +77,9 @@ public abstract class Commands extends GraphicsSystem
 				{
 					parameter2 = -1;
 					System.out.println("Catch p2 called");
+				} else if (parameter1 > 999)
+				{
+					displayMessage(message2);
 				}
 			} catch (NumberFormatException e)
 			{
@@ -72,6 +92,9 @@ public abstract class Commands extends GraphicsSystem
 				if (parameter3 < 0)
 				{
 					parameter3 = -1;
+				} else if (parameter1 > 999)
+				{
+					displayMessage(message2);
 				}
 			} catch (NumberFormatException e)
 			{
@@ -79,8 +102,7 @@ public abstract class Commands extends GraphicsSystem
 				displayMessage(message1);
 				System.out.println("Catch p3 called");
 			}
-		}
-		else
+		} else
 		{
 			parStr1 = null;
 			parameter1 = 0;
@@ -96,32 +118,46 @@ public abstract class Commands extends GraphicsSystem
 		{
 			displayMessage("Missing parameter. Default Forward called");
 			forward(40); // Default forward value
-		} else if (cmd.equals("forward") && arLength > 1 && parameter1 != -1 && parameter1 != 0)
+		} else if (cmd.equals("forward") && arLength == 2 && parameter1 > 0 && parameter1 < 1000)
 		{
 			displayMessage("Forward by " + parStr1 + " pixels");
 			forward(parameter1);
-		} else if (cmd.equals("forward") && arLength > 1 && parameter1 == -1)
+		} else if (cmd.equals("forward") && arLength == 2 && parameter1 > 999)
+		{
+			displayMessage(message2);
+		}
+		else if (cmd.equals("forward") && arLength == 2 && parameter1 == -1)
 		{
 			displayMessage(message1);
-		} else if (cmd.equals("forward") && arLength > 1 && parameter1 == 0)
+		} else if (cmd.equals("forward") && arLength == 2 && parameter1 == 0)
 		{
 			displayMessage("Enter parameter higher than 0");
+		} else if (cmd.equals("forward") && arLength > 2)
+		{
+			displayMessage(message1);
 		}
 		// BACKWARD
 		else if (cmd.equals("backward") && arLength == 1)
 		{
 			displayMessage("Missing parameter. Default Backward called");
 			forward(-40); // Default forward value
-		} else if (cmd.equals("backward") && arLength > 1 && parameter1 != -1 && parameter1 != 0)
+		} else if (cmd.equals("backward") && arLength == 2 && parameter1 > 0 && parameter1 < 1000)
 		{
 			displayMessage("Backward by " + parStr1 + " pixels");
 			forward(parameter1 * -1);
-		} else if (cmd.equals("backward") && arLength > 1 && parameter1 == -1)
+		} else if (cmd.equals("backward") && arLength == 2 && parameter1 > 999)
+		{
+			displayMessage(message2);
+		}
+		else if (cmd.equals("backward") && arLength == 2 && parameter1 == -1)
 		{
 			displayMessage(message1);
-		} else if (cmd.equals("backward") && arLength > 1 && parameter1 == 0)
+		} else if (cmd.equals("backward") && arLength == 2 && parameter1 == 0)
 		{
 			displayMessage("Enter parameter higher than 0");
+		} else if (cmd.equals("backward") && arLength > 2)
+		{
+			displayMessage(message1);
 		}
 		// Turn LEFT
 		else if (cmd.equals("left"))
@@ -156,10 +192,61 @@ public abstract class Commands extends GraphicsSystem
 				displayMessage("");
 			}
 		}
+		// Pen commands for UP DOWN and COLOUR
+		else if (cmd.equals("pen"))
+		{
+			if (myArray.length == 1)
+			{
+				displayMessage("Missing parameter");
+			} else if (arLength == 2)
+			{
+				parStr1 = myArray[1];
+				if (parStr1.equals("red"))
+				{
+					setPenColour(Color.RED);
+					displayMessage("Pen is red");
+				} else if (parStr1.equals("green"))
+				{
+					setPenColour(Color.GREEN);
+					displayMessage("Pen is green");
+				} else if (parStr1.equals("blue"))
+				{
+					setPenColour(Color.BLUE);
+					displayMessage("Pen is blue");
+				} else if (parStr1.equals("black"))
+				{
+					setPenColour(Color.BLACK);
+					displayMessage("Pen is black");
+				} else if (parStr1.equals("white"))
+				{
+					setPenColour(Color.WHITE);
+					displayMessage("Pen is white");
+				} else if (parStr1.equals("yellow"))
+				{
+					setPenColour(Color.YELLOW);
+					displayMessage("Pen is yellow");
+				} else if (parStr1.equals("up"))
+				{
+					penUp();
+					displayMessage("Pen is up");
+				} else if (parStr1.equals("down"))
+				{
+					penDown();
+					displayMessage("Pen is down");
+				} else
+				{
+					displayMessage(message1);
+				}
+			} else
+			{
+				displayMessage(message1);
+			}
+		}
 		// PENCOLOUR R G B
 		else if (cmd.equals("pencolour") && arLength == 4)
 		{
-			if (parameter1 >= 0 && parameter1 <= 255 && parameter2 >= 0 && parameter2 <= 255 && parameter3 >= 0 && parameter3 <= 255)
+			if (parameter1 >= 0 && parameter1 <= 255 && parameter2 >= 0 && parameter2 <= 255 && parameter3 >= 0
+					&& parameter3 <= 255)
 			{
 				displayMessage("Custom pen colour set");
 				setPenColour(myColour(parameter1, parameter2, parameter3));
@@ -171,56 +258,6 @@ public abstract class Commands extends GraphicsSystem
 		{
 			displayMessage("Missing parameter");
 		}
-		// Pen commands for UP DOWN and COLOUR
-		else if (cmd.equals("pen"))
-		{
-			if (myArray.length == 1)
-			{
-				displayMessage("Missing parameter");
-				return;
-			}
-			parStr1 = myArray[1];
-			if (parStr1.equals("red"))
-			{
-				setPenColour(Color.RED);
-				displayMessage("Pen is red");
-			}
-			if (parStr1.equals("green"))
-			{
-				setPenColour(Color.GREEN);
-				displayMessage("Pen is green");
-			}
-			if (parStr1.equals("blue"))
-			{
-				setPenColour(Color.BLUE);
-				displayMessage("Pen is blue");
-			}
-			if (parStr1.equals("black"))
-			{
-				setPenColour(Color.BLACK);
-				displayMessage("Pen is black");
-			}
-			if (parStr1.equals("white"))
-			{
-				setPenColour(Color.WHITE);
-				displayMessage("Pen is white");
-			}
-			if (parStr1.equals("yellow"))
-			{
-				setPenColour(Color.YELLOW);
-				displayMessage("Pen is yellow");
-			}
-			if (parStr1.equals("up"))
-			{
-				penUp();
-				displayMessage("Pen is up");
-			}
-			if (parStr1.equals("down"))
-			{
-				penDown();
-				displayMessage("Pen is down");
-			}
-		}
 		// PEN STROKE GETTER
 		else if (cmd.equals("penwidth") && arLength == 1)
 		{
@@ -229,7 +266,7 @@ public abstract class Commands extends GraphicsSystem
 		// PEN STROKE SETTER
 		else if (cmd.equals("penwidth") && arLength == 2)
 		{
-			
+
 			if (parameter1 >= 1 && parameter1 <= 10)
 			{
 				displayMessage("Pen width set to " + Integer.toString(parameter1));
@@ -238,55 +275,73 @@ public abstract class Commands extends GraphicsSystem
 			{
 				displayMessage(message1);
 			}
-			
-			else {
+
+			else
+			{
 				displayMessage("Pen width parameter shoud be a value betwean 1 and 10");
 			}
 		}
 		// Background colour
 		else if (cmd.equals("background"))
 		{
-			if (myArray.length == 1)
+			if (arLength == 1)
 			{
 				displayMessage("Missing parameter");
 				return;
-			}
-			parStr1 = myArray[1];
-			if (parStr1.equals("red"))
+			} else if (arLength == 2)
 			{
-				setBackground_Col(Color.RED);
-				displayMessage("Background set to red");
-				clear();
+				parStr1 = myArray[1];
+				if (parStr1.equals("red"))
+				{
+					setBackground_Col(Color.RED);
+					displayMessage("Background set to red");
+					clear();
+				} else if (parStr1.equals("green"))
+				{
+					setBackground_Col(Color.GREEN);
+					displayMessage("Background set to green");
+					clear();
+				} else if (parStr1.equals("blue"))
+				{
+					setBackground_Col(Color.BLUE);
+					displayMessage("Background set to blue");
+					clear();
+				} else if (parStr1.equals("black"))
+				{
+					setBackground_Col(Color.BLACK);
+					displayMessage("Background set to black");
+					clear();
+				} else if (parStr1.equals("white"))
+				{
+					setBackground_Col(Color.WHITE);
+					displayMessage("Background set to white");
+					clear();
+				} else if (parStr1.equals("yellow"))
+				{
+					setBackground_Col(Color.YELLOW);
+					displayMessage("Background set to yellow");
+					clear();
+				} else
+				{
+					displayMessage(message1);
+				}
 			}
-			if (parStr1.equals("green"))
+			// BACKGROUND R G B
+			else if (arLength == 4)
 			{
-				setBackground_Col(Color.GREEN);
-				displayMessage("Background set to green");
-				clear();
-			}
-			if (parStr1.equals("blue"))
+				if (parameter1 >= 0 && parameter1 <= 255 && parameter2 >= 0 && parameter2 <= 255 && parameter3 >= 0
+						&& parameter3 <= 255)
+				{
+					displayMessage("Custom background colour set");
+					setBackground_Col(myColour(parameter1, parameter2, parameter3));
+					clear();
+				} else
+				{
+					displayMessage("Invalid parameter. Each parameter should be a number between 0 and 255");
+				}
+			} else
 			{
-				setBackground_Col(Color.BLUE);
-				displayMessage("Background set to blue");
-				clear();
-			}
-			if (parStr1.equals("black"))
-			{
-				setBackground_Col(Color.BLACK);
-				displayMessage("Background set to black");
-				clear();
-			}
-			if (parStr1.equals("white"))
-			{
-				setBackground_Col(Color.WHITE);
-				displayMessage("Background set to white");
-				clear();
-			}
-			if (parStr1.equals("yellow"))
-			{
-				setBackground_Col(Color.YELLOW);
-				displayMessage("Background set to yellow");
-				clear();
+				displayMessage(message1);
 			}
 		}
 		// SQUARE
