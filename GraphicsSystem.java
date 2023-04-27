@@ -1,22 +1,19 @@
 package todor.lbu;
 
 import java.awt.Color;
-
-import javax.swing.JOptionPane;
-
 import uk.ac.leedsbeckett.oop.LBUGraphics;
 
 public abstract class GraphicsSystem extends LBUGraphics
 {
 
+	private static final long serialVersionUID = 1L;
+
 	public GraphicsSystem()
 	{
-		super();
+		//super();
 		System.out.println("GraphicsSystem constructor called");
 	}
-	
-	
-	
+
 	public Color myColour(int r, int g, int b)
 	{
 		Color color = new Color(r,g,b);
