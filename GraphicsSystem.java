@@ -1,28 +1,104 @@
 package todor.lbu;
 
 import java.awt.Color;
+import java.io.*;
+
 import uk.ac.leedsbeckett.oop.LBUGraphics;
 
 public abstract class GraphicsSystem extends LBUGraphics
 {
 
+	boolean screenUpdate = false;
 	private static final long serialVersionUID = 1L;
 
 	public GraphicsSystem()
 	{
-		//super();
-		System.out.println("GraphicsSystem constructor called");
+		System.out.println("GraphicsSystem class constructor called");
 	}
 
+	// FILE SAVE LOAD
+	@SuppressWarnings("resource")
+	public void FileHandling()
+	{
+		final int ENDOFFILE = -1;
+		FileInputStream in = null;
+		FileOutputStream out = null;
+
+		try
+		{
+			in = new FileInputStream("input.txt");
+		} catch (FileNotFoundException e)
+		{
+
+			displayMessage("File not found");
+			return;
+		}
+
+		try
+		{
+			out = new FileOutputStream("output.txt");
+		} catch (FileNotFoundException e)
+		{
+			displayMessage("Cannot write file");
+			return;
+		}
+
+		int c = 0;
+
+		do
+		{
+			try
+			{
+				c = in.read();
+
+				System.out.print("*" + (char) c);
+				if (c != ENDOFFILE)
+				{
+					out.write(c);
+					displayMessage("File writing successful");
+				}
+
+			} catch (IOException e)
+			{
+				System.out.println("error reading/writing file");
+				return;
+			}
+		} while (c != ENDOFFILE);
+
+		try
+		{
+			in.close();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try
+		{
+			out.close();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("finished");
+
+	}
+
+	// CUSTOM COLOUR
 	public Color myColour(int r, int g, int b)
 	{
-		Color color = new Color(r,g,b);
+		Color color = new Color(r, g, b);
 		return color;
 	}
 
 	public void forward(int distance)
 	{
 		super.forward(distance);
+		if (getPenState())
+		{
+			screenUpdate = true;
+		}
 		if (xPos > 800)
 		{
 			System.out.println("Out of bounds");
@@ -95,7 +171,7 @@ public abstract class GraphicsSystem extends LBUGraphics
 		forward(1 * size);
 		turnLeft(135);
 		penUp();
-		//forward(200);
+		// forward(200);
 	}
 
 	private void dSml(int x, int y, int stroke, int size)
@@ -126,7 +202,7 @@ public abstract class GraphicsSystem extends LBUGraphics
 		forward(1 * size);
 		turnLeft(135);
 		penUp();
-		//forward(200);
+		// forward(200);
 	}
 
 	private void rSml(int x, int y, int stroke, int size)
