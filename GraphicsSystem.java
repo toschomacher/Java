@@ -7,6 +7,11 @@ import uk.ac.leedsbeckett.oop.LBUGraphics;
 
 public abstract class GraphicsSystem extends LBUGraphics
 {
+	boolean check = getPenState();
+	public static boolean currentPenState(boolean checking)
+	{
+		return checking;
+	}
 
 	boolean screenUpdate = false;
 	private static final long serialVersionUID = 1L;
