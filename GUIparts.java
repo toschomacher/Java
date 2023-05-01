@@ -1,6 +1,12 @@
 package todor.lbu;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,7 +43,7 @@ public class GUIparts
 		// Adding TurtleGraphics Panel to the main frame
 		mainFrame.add(tHis);
 		mainFrame.setBounds(240, 200, 1100, 440);
-		mainFrame.setVisible(true); // now display it
+
 		// Bevel Border LOWERED for additional interaction
 		lbl1.setBounds(805, 10, 275, 340);
 		lbl1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
@@ -68,5 +74,21 @@ public class GUIparts
 		{
 			lbl3.setText(txt4);
 		});
+		// Pen DOWN images
+		try
+		{
+			BufferedImage img = ImageIO
+					.read(new File("C:\\Users\\tosch\\eclipse-workspace\\TurtleGraphics\\Images\\pendown.png"));
+			JLabel imgs = new JLabel(new ImageIcon(img));
+			imgs.setBounds(1000, 270, 82, 82);
+			mainFrame.add(imgs);
+			System.out.println("pendown called");
+		} catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// Main frame visible
+		mainFrame.setVisible(true); // now display it
 	}
 }
