@@ -8,24 +8,26 @@ public class Commands extends GraphicsSystem
 
 	private static final long serialVersionUID = 1L;
 
+	GUIparts myGUI = new GUIparts();
+	
 	public Commands()
 	{
 		System.out.println("Commands class constructor called");
-		GUIparts myGUI = new GUIparts();
+		
 		myGUI.myGUI(this);
 		penDown();
 	}
 
 	public void processCommand(String command)
 	{
-		String message1 = "Invalid/non-numeric parameter";
-		String message2 = "Excessively large number input";
+		String msgInvalidPar = "Invalid/non-numeric parameter";
+		String msgExcessiveNum = "Excessively large number input";
 		displayMessage("");
 		String parStr1;
 		String[] myArray = command.toLowerCase().split(" ");
 		String cmd = myArray[0];
 		int parameter1;
-		int parameter2 = -1;
+		int parameter2;
 		int parameter3 = -1;
 		int arLength = myArray.length;
 		boolean validCommand = true;
@@ -38,19 +40,21 @@ public class Commands extends GraphicsSystem
 			try
 			{
 				parameter1 = Integer.parseInt(myArray[1]);
+				parameter2 = -1;
+				parameter3 = -1;
 				if (parameter1 < 0)
 				{
 					parameter1 = -1;
-					parameter2 = -1;
-					parameter3 = -1;
 				} else if (parameter1 > 999)
 				{
-					displayMessage(message2);
+					displayMessage(msgExcessiveNum);
 				}
 			} catch (NumberFormatException e)
 			{
 				parameter1 = -1;
-				displayMessage(message1);
+				parameter2 = -1;
+				parameter3 = -1;
+				displayMessage(msgInvalidPar);
 				doubleCheck = false;
 			}
 		} else if (arLength == 4)
@@ -64,12 +68,12 @@ public class Commands extends GraphicsSystem
 					parameter1 = -1;
 				} else if (parameter1 > 999)
 				{
-					displayMessage(message2);
+					displayMessage(msgExcessiveNum);
 				}
 			} catch (NumberFormatException e)
 			{
 				parameter1 = -1;
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 			}
 			try
 			{
@@ -80,12 +84,12 @@ public class Commands extends GraphicsSystem
 					System.out.println("Catch p2 called");
 				} else if (parameter1 > 999)
 				{
-					displayMessage(message2);
+					displayMessage(msgExcessiveNum);
 				}
 			} catch (NumberFormatException e)
 			{
 				parameter2 = -1;
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 			}
 			try
 			{
@@ -95,12 +99,12 @@ public class Commands extends GraphicsSystem
 					parameter3 = -1;
 				} else if (parameter1 > 999)
 				{
-					displayMessage(message2);
+					displayMessage(msgExcessiveNum);
 				}
 			} catch (NumberFormatException e)
 			{
 				parameter3 = -1;
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 				System.out.println("Catch p3 called");
 			}
 		} else
@@ -109,10 +113,9 @@ public class Commands extends GraphicsSystem
 			parameter1 = 0;
 			parameter2 = 0;
 			parameter3 = 0;
-			// displayMessage("No parameter entered");
 		}
 
-		// COMMANDS LIST
+		// COMMANDS CHECK LIST
 
 		// ABOUT
 		if (cmd.equals("about"))
@@ -168,7 +171,7 @@ public class Commands extends GraphicsSystem
 					clear();
 				} else
 				{
-					displayMessage(message1);
+					displayMessage(msgInvalidPar);
 				}
 			}
 			// BACKGROUND R G B
@@ -186,7 +189,7 @@ public class Commands extends GraphicsSystem
 				}
 			} else
 			{
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 			}
 		}
 		// BACKWARD
@@ -200,16 +203,16 @@ public class Commands extends GraphicsSystem
 			forward(parameter1 * -1);
 		} else if (cmd.equals("backward") && arLength == 2 && parameter1 > 999)
 		{
-			displayMessage(message2);
+			displayMessage(msgExcessiveNum);
 		} else if (cmd.equals("backward") && arLength == 2 && parameter1 == -1)
 		{
-			displayMessage(message1);
+			displayMessage(msgInvalidPar);
 		} else if (cmd.equals("backward") && arLength == 2 && parameter1 == 0)
 		{
 			displayMessage("Enter parameter higher than 0");
 		} else if (cmd.equals("backward") && arLength > 2)
 		{
-			displayMessage(message1);
+			displayMessage(msgInvalidPar);
 		}
 		// CLEAR
 		else if (cmd.equals("clear"))
@@ -237,6 +240,18 @@ public class Commands extends GraphicsSystem
 			}
 
 		}
+		// FILL
+		else if (cmd.equals("fill") && arLength == 1)
+		{
+			try
+			{
+				fill();
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				displayMessage("Not surrounded by graphical area");
+			}
+		}
 		// FORWARD
 		else if (cmd.equals("forward") && arLength == 1)
 		{
@@ -248,16 +263,16 @@ public class Commands extends GraphicsSystem
 			forward(parameter1);
 		} else if (cmd.equals("forward") && arLength == 2 && parameter1 > 999)
 		{
-			displayMessage(message2);
+			displayMessage(msgExcessiveNum);
 		} else if (cmd.equals("forward") && arLength == 2 && parameter1 == -1)
 		{
-			displayMessage(message1);
+			displayMessage(msgInvalidPar);
 		} else if (cmd.equals("forward") && arLength == 2 && parameter1 == 0)
 		{
 			displayMessage("Enter parameter higher than 0");
 		} else if (cmd.equals("forward") && arLength > 2)
 		{
-			displayMessage(message1);
+			displayMessage(msgInvalidPar);
 		}
 		// GET DIRECTION
 		else if (cmd.equals("direction"))
@@ -307,11 +322,11 @@ public class Commands extends GraphicsSystem
 					displayMessage("Pen is down");
 				} else
 				{
-					displayMessage(message1);
+					displayMessage(msgInvalidPar);
 				}
 			} else
 			{
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 			}
 		}
 		// PENCOLOUR R G B
@@ -357,7 +372,7 @@ public class Commands extends GraphicsSystem
 				setStroke(parameter1);
 			} else if (!doubleCheck)
 			{
-				displayMessage(message1);
+				displayMessage(msgInvalidPar);
 			}
 
 			else
@@ -460,7 +475,8 @@ public class Commands extends GraphicsSystem
 		{
 			validCommand = false;
 		}
-		// COMMAND VALIDATION must be last in this method to validate commands above
+		// COMMAND VALIDATION must be the last if statement in this method to validate
+		// all commands above
 		if (!validCommand)
 		{
 			displayMessage("Final if - Invalid command");
