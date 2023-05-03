@@ -1,20 +1,120 @@
 package todor.lbu;
 
 import java.awt.Color;
-import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 public class Commands extends GraphicsSystem
 {
-
+	JFrame mainFrame = new JFrame("Turtle Graphics Application");
+	JLabel lbl4 = new JLabel(); //pen image label
+	private String txt1, txt2, txt3, txt4;
+	public int penIsDown = 1; //1 = pen down and 0 = pen up
 	private static final long serialVersionUID = 1L;
+	private ImageIcon[] imgs;
 
-	GUIparts myGUI = new GUIparts();
+	public void myGUI(Commands tHis)
+	{
+		System.out.println("myGUI method called");
+		txt1 = "<html>This program was partly developed by Todor Vasilev, "
+				+ "LBU student - CS4D 2022-2023.<br><br>Student ID - c3643417<br>"
+				+ "_____________________________________</html>";
+		txt2 = "<html>Available commands:<br>" + "ABOUT - plays Turtle Graphics Demo<br>"
+				+ "RESET - resets the turtle at the start<br>" + "CLEAR - clears the drawing field<br>"
+				+ "TURNRIGHT or TURNRIGHT [parameter]<br>" + "PENUP<br>" + "PENDOWN<br></html>";
+		txt3 = "<html>Saving commands history</html>";
+		txt4 = "<html>Loading file</html>";
+		
+		// Array with list of file names
+		String[] files = new String[]
+		{ "penup.png", "pendown.png" };
+		//Images path
+		String path = "C:/Users/tosch/eclipse-workspace/TurtleGraphics/Images/";
+		imgs = new ImageIcon[files.length];
+		for(int k = 0; k < imgs.length; k++)
+		{
+			imgs[k] = new ImageIcon(path + files[k]);
+		}
+		lbl4 = new JLabel(imgs[1]);
+		lbl4.setBounds(10, 10, 80, 80);
+		mainFrame.add(lbl4);
+		lbl4.setBounds(1000, 275, 80, 80);
+		JLabel lbl1 = new JLabel(); //Main label for user interaction
+		JLabel lbl2 = new JLabel(txt1);
+		JLabel lbl3 = new JLabel("");
+		JButton btn1 = new JButton("Close");
+		JButton btn2 = new JButton("Help");
+		JButton btn3 = new JButton("Save");
+		JButton btn4 = new JButton("Load");
+		lbl3.setVerticalAlignment(JLabel.TOP);
+		mainFrame.setResizable(false);
+		mainFrame.setDefaultCloseOperation(3);
+		mainFrame.setLayout(null);
+		// Adding TurtleGraphics Panel to the main frame
+		mainFrame.add(tHis);
+		mainFrame.setBounds(240, 200, 1100, 440);
+		// Bevel Border LOWERED for additional interaction
+		lbl1.setBounds(805, 10, 275, 340);
+		lbl1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		lbl2.setBounds(810, 15, 255, 95); // setting the size and position of the label
+		mainFrame.add(lbl2); // adding the label to the window
+		lbl3.setBounds(810, 110, 255, 195); // setting the size and position of the label
+		mainFrame.add(lbl3);
+		mainFrame.add(lbl1);
+		// Button 1 CLOSE
+		btn1.setBounds(800, 360, 70, 30);
+		mainFrame.add(btn1);
+		btn1.addActionListener(e -> System.exit(0));
+		// Button 2 HELP
+		btn2.setBounds(871, 360, 70, 30);
+		mainFrame.add(btn2);
+		btn2.addActionListener(e -> lbl3.setText(txt2));
+		// Button 3 SAVE
+		btn3.setBounds(942, 360, 70, 30);
+		mainFrame.add(btn3);
+		btn3.addActionListener(e ->
+		{
+			lbl3.setText(txt3); // adding the label to the window
+		});
+		// Button 4 LOAD
+		btn4.setBounds(1013, 360, 70, 30);
+		mainFrame.add(btn4);
+		btn4.addActionListener(e ->
+		{
+			lbl3.setText(txt4);
+		});
+		// Main frame visible
+		mainFrame.setVisible(true); // now display it
+	}
+	//Overriding penUp()
+	public void penUp()
+	{
+		penIsDown = 0;
+		lbl4.setIcon(imgs[penIsDown]);
+		displayMessage("Pen is up");
+		super.penUp();
+	}
+	//Overriding penDown()
+	public void penDown()
+	{
+		penIsDown = 1;
+		lbl4.setIcon(imgs[penIsDown]);
+		displayMessage("Pen is down");
+		super.penDown();
+	}
 	
 	public Commands()
 	{
 		System.out.println("Commands class constructor called");
 		
-		myGUI.myGUI(this);
+		myGUI(this);
 		penDown();
 	}
 
@@ -32,7 +132,7 @@ public class Commands extends GraphicsSystem
 		int arLength = myArray.length;
 		boolean validCommand = true;
 		boolean doubleCheck = true;
-
+		
 		// Setting up variables
 		if (arLength == 2)
 		{
@@ -315,11 +415,9 @@ public class Commands extends GraphicsSystem
 				} else if (parStr1.equals("up"))
 				{
 					penUp();
-					displayMessage("Pen is up");
 				} else if (parStr1.equals("down"))
 				{
 					penDown();
-					displayMessage("Pen is down");
 				} else
 				{
 					displayMessage(msgInvalidPar);
@@ -384,6 +482,8 @@ public class Commands extends GraphicsSystem
 		else if (cmd.equals("reset"))
 		{
 			reset();
+			penIsDown = 1;
+			lbl4.setIcon(imgs[penIsDown]);
 			displayMessage("Reset successful");
 		}
 		// SAVE LOAD FILE
