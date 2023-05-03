@@ -1,13 +1,6 @@
 package todor.lbu;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
@@ -29,8 +22,8 @@ public class Commands extends GraphicsSystem
 		txt2 = "<html>Available commands:<br>" + "ABOUT - plays Turtle Graphics Demo<br>"
 				+ "RESET - resets the turtle at the start<br>" + "CLEAR - clears the drawing field<br>"
 				+ "TURNRIGHT or TURNRIGHT [parameter]<br>" + "PENUP<br>" + "PENDOWN<br></html>";
-		txt3 = "<html>Saving commands history</html>";
-		txt4 = "<html>Loading file</html>";
+		txt3 = "<html>Image saved</html>";
+		txt4 = "<html>Image loaded</html>";
 		
 		// Array with list of file names
 		String[] files = new String[]
@@ -81,6 +74,7 @@ public class Commands extends GraphicsSystem
 		mainFrame.add(btn3);
 		btn3.addActionListener(e ->
 		{
+			ImageSave();
 			lbl3.setText(txt3); // adding the label to the window
 		});
 		// Button 4 LOAD
@@ -88,6 +82,7 @@ public class Commands extends GraphicsSystem
 		mainFrame.add(btn4);
 		btn4.addActionListener(e ->
 		{
+			ImageLoad();
 			lbl3.setText(txt4);
 		});
 		// Main frame visible
@@ -379,6 +374,11 @@ public class Commands extends GraphicsSystem
 		{
 			displayMessage("Turtle at " + Integer.toString(getDirection()) + " degrees");
 		}
+		//LOAD IMAGE
+		else if (cmd.equals("load") && arLength == 2 && parStr1.equals("image"))
+		{
+			ImageLoad();
+		}
 		// PEN commands for UP DOWN and COLOUR
 		else if (cmd.equals("pen"))
 		{
@@ -486,10 +486,14 @@ public class Commands extends GraphicsSystem
 			lbl4.setIcon(imgs[penIsDown]);
 			displayMessage("Reset successful");
 		}
-		// SAVE LOAD FILE
+		// SAVE FILE
 		else if (cmd.equals("save") && arLength == 2 && parStr1.equals("commands"))
 		{
 			FileHandling();
+		}
+		else if (cmd.equals("save") && arLength == 2 && parStr1.equals("image"))
+		{
+			ImageSave();
 		}
 		// SQUARE
 		else if (cmd.equals("square") && arLength == 1)
