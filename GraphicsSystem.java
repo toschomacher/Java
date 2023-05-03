@@ -1,13 +1,15 @@
 package todor.lbu;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.*;
-
+import javax.imageio.ImageIO;
 import uk.ac.leedsbeckett.oop.LBUGraphics;
 
 public abstract class GraphicsSystem extends LBUGraphics
 {
 	boolean check = getPenState();
+
 	public static boolean currentPenState(boolean checking)
 	{
 		return checking;
@@ -21,7 +23,37 @@ public abstract class GraphicsSystem extends LBUGraphics
 		System.out.println("GraphicsSystem class constructor called");
 	}
 
-	// FILE SAVE LOAD
+	// IMAGE SAVE
+	public void ImageSave()
+	{
+		try
+		{
+			BufferedImage bi = getBufferedImage(); // retrieve image
+			File outputfile = new File("turtleimage.png");
+			ImageIO.write(bi, "png", outputfile);
+			screenUpdate = false;
+		} catch (IOException e)
+		{
+			// handle exception
+			System.out.println("Image file doe not exist");
+		}
+	}
+	//IMAGE LOAD
+	public void ImageLoad()
+	{
+		BufferedImage img = null;
+		try
+		{
+			img = ImageIO.read(new File("turtleimage.png"));
+			setBufferedImage(img);
+			screenUpdate = false;
+		} catch (IOException e)
+		{
+			// handle exception
+			System.out.println("Image file doe not exist");
+		}
+	}
+	//FILA SAVE
 	@SuppressWarnings("resource")
 	public void FileHandling()
 	{
