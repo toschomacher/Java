@@ -9,6 +9,7 @@ import uk.ac.leedsbeckett.oop.LBUGraphics;
 public abstract class GraphicsSystem extends LBUGraphics
 {
 	boolean check = getPenState();
+	StringBuffer sBuffer = new StringBuffer();
 
 	public static boolean currentPenState(boolean checking)
 	{
@@ -38,7 +39,8 @@ public abstract class GraphicsSystem extends LBUGraphics
 			System.out.println("Image file doe not exist");
 		}
 	}
-	//IMAGE LOAD
+
+	// IMAGE LOAD
 	public void ImageLoad()
 	{
 		BufferedImage img = null;
@@ -53,73 +55,49 @@ public abstract class GraphicsSystem extends LBUGraphics
 			System.out.println("Image file doe not exist");
 		}
 	}
-	//FILA SAVE
-	@SuppressWarnings("resource")
-	public void FileHandling()
+
+	// COMMANDS SAVE
+	public void FileSave()
 	{
-		final int ENDOFFILE = -1;
-		FileInputStream in = null;
-		FileOutputStream out = null;
-
+		PrintWriter outFile = null;
 		try
 		{
-			in = new FileInputStream("input.txt");
+			outFile = new PrintWriter("commands.txt");
+			outFile.print(sBuffer);
 		} catch (FileNotFoundException e)
 		{
-
-			displayMessage("File not found");
-			return;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		outFile.close();
+	}
 
+	// COMMANDS LOAD
+	public void CommandsLoad()
+	{
+		File file = new File("commands.txt");
+		FileReader fileReader = null;
 		try
 		{
-			out = new FileOutputStream("output.txt");
+			fileReader = new FileReader(file);
 		} catch (FileNotFoundException e)
 		{
-			displayMessage("Cannot write file");
-			return;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		int c = 0;
-
-		do
+		BufferedReader br = new BufferedReader(fileReader);
+		String line;
+		try
 		{
-			try
+			while ((line = br.readLine()) != null)
 			{
-				c = in.read();
-
-				System.out.print("*" + (char) c);
-				if (c != ENDOFFILE)
-				{
-					out.write(c);
-					displayMessage("File writing successful");
-				}
-
-			} catch (IOException e)
-			{
-				System.out.println("error reading/writing file");
-				return;
+				processCommand(line);
 			}
-		} while (c != ENDOFFILE);
-
-		try
-		{
-			in.close();
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try
-		{
-			out.close();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("finished");
-
 	}
 
 	// CUSTOM COLOUR
