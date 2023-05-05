@@ -7,31 +7,34 @@ import javax.swing.border.BevelBorder;
 public class Commands extends GraphicsSystem
 {
 	JFrame mainFrame = new JFrame("Turtle Graphics Application");
-	JLabel lbl4 = new JLabel(); //pen image label
+	JLabel lbl4 = new JLabel(); // pen image label
 	private String txt1, txt2, txt3, txt4;
-	public int penIsDown = 1; //1 = pen down and 0 = pen up
+	public int penIsDown = 1; // 1 = pen down and 0 = pen up
 	private static final long serialVersionUID = 1L;
 	private ImageIcon[] imgs;
 
 	public void myGUI(Commands tHis)
 	{
 		System.out.println("myGUI method called");
-		txt1 = "<html>This program was partly developed by Todor Vasilev, "
-				+ "LBU student - CS4D 2022-2023.<br><br>Student ID - c3643417<br>"
+		txt1 = "<html>This program was partly developed by <br>Todor Vasilev, "
+				+ "LBU student - CS4D 2022-2023.<br>T.Vasilev9447@student.leedsbeckett.ac.uk<br>Student ID - c3643417<br>"
 				+ "_____________________________________</html>";
-		txt2 = "<html>Available commands:<br>" + "ABOUT - plays Turtle Graphics Demo<br>"
-				+ "RESET - resets the turtle at the start<br>" + "CLEAR - clears the drawing field<br>"
-				+ "TURNRIGHT or TURNRIGHT [parameter]<br>" + "PENUP<br>" + "PENDOWN<br></html>";
+		txt2 = "<html>Available commands:<br>" + "ABOUT; ALIGN; BACKGROUND [COLOUR]; "
+				+ "BACKWARD; BACKWARD [X]; CLEAR; DIRECTION; FORWARD; FORWARD [X]; LEFT; LEFT [X]; LOAD COMMANDS; "
+				+ "LOAD IMAGE; NEW; PEN [COLOUR]; PEN DOWN; PEN UP; PENCOLOUR [R] [G] [B]; PENSTATE; "
+				+ "PENWIDTH [X]; RESET; RIGHT; RIGHT[X]; SAVE COMMANDS; SAVE IMAGE; SETX [X]; "
+				+ "SETY [X]; SQUARE; SQUARE [X]; TRINAGLE; TRIANGLE [X];<br>TRIANGLE [X] [Y] [Z];<br>"
+				+ "XPOS; YPOS</html>";
 		txt3 = "<html>Image saved</html>";
 		txt4 = "<html>Image loaded</html>";
-		
+
 		// Array with list of file names
 		String[] files = new String[]
 		{ "penup.png", "pendown.png" };
-		//Images path
+		// Images path
 		String path = "C:/Users/tosch/eclipse-workspace/TurtleGraphics/Images/";
 		imgs = new ImageIcon[files.length];
-		for(int k = 0; k < imgs.length; k++)
+		for (int k = 0; k < imgs.length; k++)
 		{
 			imgs[k] = new ImageIcon(path + files[k]);
 		}
@@ -39,7 +42,7 @@ public class Commands extends GraphicsSystem
 		lbl4.setBounds(10, 10, 80, 80);
 		mainFrame.add(lbl4);
 		lbl4.setBounds(1000, 275, 80, 80);
-		JLabel lbl1 = new JLabel(); //Main label for user interaction
+		JLabel lbl1 = new JLabel(); // Main label for user interaction
 		JLabel lbl2 = new JLabel(txt1);
 		JLabel lbl3 = new JLabel("");
 		JButton btn1 = new JButton("Close");
@@ -56,9 +59,9 @@ public class Commands extends GraphicsSystem
 		// Bevel Border LOWERED for additional interaction
 		lbl1.setBounds(805, 10, 275, 340);
 		lbl1.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		lbl2.setBounds(810, 15, 255, 95); // setting the size and position of the label
+		lbl2.setBounds(810, 15, 265, 95); // setting the size and position of the label
 		mainFrame.add(lbl2); // adding the label to the window
-		lbl3.setBounds(810, 110, 255, 195); // setting the size and position of the label
+		lbl3.setBounds(810, 110, 255, 205); // setting the size and position of the label
 		mainFrame.add(lbl3);
 		mainFrame.add(lbl1);
 		// Button 1 CLOSE
@@ -88,7 +91,8 @@ public class Commands extends GraphicsSystem
 		// Main frame visible
 		mainFrame.setVisible(true); // now display it
 	}
-	//Overriding penUp()
+
+	// Overriding penUp()
 	public void penUp()
 	{
 		penIsDown = 0;
@@ -96,7 +100,8 @@ public class Commands extends GraphicsSystem
 		displayMessage("Pen is up");
 		super.penUp();
 	}
-	//Overriding penDown()
+
+	// Overriding penDown()
 	public void penDown()
 	{
 		penIsDown = 1;
@@ -104,11 +109,10 @@ public class Commands extends GraphicsSystem
 		displayMessage("Pen is down");
 		super.penDown();
 	}
-	
+
 	public Commands()
 	{
 		System.out.println("Commands class constructor called");
-		
 		myGUI(this);
 		penDown();
 	}
@@ -120,14 +124,20 @@ public class Commands extends GraphicsSystem
 		displayMessage("");
 		String parStr1;
 		String[] myArray = command.toLowerCase().split(" ");
-		String cmd = myArray[0];
+		String cmd;
+		if (myArray.length < 1)
+		{
+			cmd = "";
+		} else {
+			cmd = myArray[0];
+		}
 		int parameter1;
 		int parameter2;
 		int parameter3 = -1;
 		int arLength = myArray.length;
 		boolean validCommand = true;
 		boolean doubleCheck = true;
-		
+
 		// Setting up variables
 		if (arLength == 2)
 		{
@@ -310,7 +320,7 @@ public class Commands extends GraphicsSystem
 			displayMessage(msgInvalidPar);
 		}
 		// CLEAR
-		else if (cmd.equals("clear"))
+		else if (cmd.equals("clear") || cmd.equals("new"))
 		{
 			if (screenUpdate)
 			{
@@ -320,13 +330,14 @@ public class Commands extends GraphicsSystem
 				if (dialogButton == JOptionPane.YES_OPTION)
 				{
 					clear();
+					sBuffer.delete(0, sBuffer.length());
 					screenUpdate = false;
 				} else if (dialogButton == JOptionPane.NO_OPTION)
 				{
-					turnLeft();
+					displayMessage("Screen image not saved!");
 				} else if (dialogButton == JOptionPane.CANCEL_OPTION)
 				{
-					turnRight();
+					displayMessage("");
 				}
 			} else
 			{
@@ -374,10 +385,14 @@ public class Commands extends GraphicsSystem
 		{
 			displayMessage("Turtle at " + Integer.toString(getDirection()) + " degrees");
 		}
-		//LOAD IMAGE
+		
+		// LOAD IMAGE/FILE
 		else if (cmd.equals("load") && arLength == 2 && parStr1.equals("image"))
 		{
 			ImageLoad();
+		} else if (cmd.equals("load") && arLength == 2 && parStr1.equals("commands"))
+		{
+			CommandsLoad();
 		}
 		// PEN commands for UP DOWN and COLOUR
 		else if (cmd.equals("pen"))
@@ -486,12 +501,11 @@ public class Commands extends GraphicsSystem
 			lbl4.setIcon(imgs[penIsDown]);
 			displayMessage("Reset successful");
 		}
-		// SAVE FILE
+		// SAVE FILE/IMAGE
 		else if (cmd.equals("save") && arLength == 2 && parStr1.equals("commands"))
 		{
-			FileHandling();
-		}
-		else if (cmd.equals("save") && arLength == 2 && parStr1.equals("image"))
+			FileSave();
+		} else if (cmd.equals("save") && arLength == 2 && parStr1.equals("image"))
 		{
 			ImageSave();
 		}
@@ -500,7 +514,7 @@ public class Commands extends GraphicsSystem
 		{
 			displayMessage("Missing parameter. Drawing a default square");
 			square(20);
-		} else if (cmd.equals("square") && arLength > 1)
+		} else if (cmd.equals("square") && arLength == 2)
 		{
 			square(parameter1);
 		}
@@ -583,10 +597,24 @@ public class Commands extends GraphicsSystem
 		// all commands above
 		if (!validCommand)
 		{
-			displayMessage("Final if - Invalid command");
+			displayMessage("Invalid command");
+			System.out.println("Final if - Invalid command");
 			JOptionPane.showMessageDialog(getComponentPopupMenu(), "Press OK to continue!", "Invalid command",
 					JOptionPane.WARNING_MESSAGE);
 			displayMessage("Enter command");
+		} else
+		{
+			String sucCommand = "";
+			for (int i = 0; i < arLength; i++)
+			{
+				sucCommand = sucCommand + myArray[i];
+				if (i!= (arLength-1))
+				{
+					sucCommand = sucCommand + " ";
+				}
+			}
+			sucCommand = sucCommand + "\n";
+			sBuffer.append(sucCommand);
 		}
 	}
 }
